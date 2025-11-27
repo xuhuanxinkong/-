@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>系统模块样式效果图（顶部数据统计版）</title>
+    <style>
+        /* 核心样式保留与调整 */
+        /* 全局数据统计（移至顶部，新增专属样式） */
+        .world-data{
+            width: 100%;
+            padding: 8px 0;
+            text-align: center;
+            border-bottom: 1px solid #eee; /* 加底部边框，与下方区域轻微分隔 */
+            background-color: #fcfcfc; /* 浅背景，突出顶部数据区 */
+        }
+        .world-data h5{
+            margin: 0 0 3px; /* 精简标题间距，更紧凑 */
+            font-size: 14px;
+            color: #666;
+        }
+        .world-data p{
+            margin: 0;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .system-split{
+            width: calc(100% - 20px);
+            height: 0px;
+            border-bottom: 1px dashed #ddd;
+            margin: 10px;
+            float: left;
+        }
+        .system-split div{
+            position: relative;
+            top: -10px;
+            left: calc(50% - 80px);
+            width: 160px;
+            background-color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .system-head{
+            width: 100%;
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
+            padding: 8px 0;
+        }
+        .system-body{
+            position: absolute;
+            top: 130px; /* 顶部高度=头部(40px左右)+数据统计区(50px左右)，预留足够空间 */
+            bottom: 60px; /* 预留功能键高度 */
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .system-box{
+            width: 100%;
+            height: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* 操作区仍固定在中下位置 */
+        }
+        .now-saved{ color: red; }
+
+        /* 操作内容显示区（保持精简） */
+        .text-output-area{
+            width: 100%;
+            margin: 0 0 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fafafa;
+            font-size: 13px;
+            line-height: 20px;
+            color: #333;
+            height: 100px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .text-output-area .title{
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .text-output-area .page-mark{
+            color: #0066cc;
+        }
+
+        /* 底部功能按键（保持精简） */
+        .function-btns-area{
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            height: 45px;
+            display: flex;
+            gap: 0;
+        }
+        .function-btn{
+            flex: 1;
+            height: 100%;
+            border: 1px solid #ddd;
+            border-right: none;
+            background-color: #fff;
+            font-size: 12px;
+            text-align: center;
+            line-height: 45px;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+        .function-btn:last-child{
+            border-right: 1px solid #ddd;
+        }
+        .function-btn:hover{
+            background-color: #f0f0f0;
+            border-color: #ccc;
+        }
+        .function-btn.active{
+            background-color: #e8f0fe;
+            border-color: #0066cc;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        /* 辅助样式：基础布局 */
+        body{ margin: 0; padding: 0; font-family: "Microsoft YaHei", sans-serif; }
+        .system{ width: 600px; margin: 0 auto; position: relative; min-height: 600px; }
+        .system-head span{ margin: 0 15px; }
+    </style>
+</head>
+<body>
+<div class="system">
+    <!-- 1. 系统头部（最顶部） -->
+    <div class="system-head">
+        <span>当前用户：测试账号</span>
+        <span>更新时间：2024-10-24</span>
+        <span class="now-saved">已保存</span>
+    </div>
+
+    <!-- 2. 全局数据统计（移至头部下方，顶部位置） -->
+    <div class="world-data">
+        <h5>全局数据统计</h5>
+        <p>在线人数：128 ｜ 今日新增：23 ｜ 累计数据：1568</p >
+    </div>
+
+    <!-- 3. 系统主体（中下部分，避开顶部数据区） -->
+    <div class="system-body">
+        <div class="system-box">
+            <!-- 分割线 -->
+            <div class="system-split">
+                <div>操作内容显示区</div>
+            </div>
+
+            <!-- 核心：精简的操作内容显示区 -->
+            <div class="text-output-area" id="outputArea">
+                <span class="title">页面状态：</span>
+                <p>请点击下方按钮，查看页面切换痕迹</p >
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 底部功能按键 -->
+    <div class="function-btns-area">
+        <div class="function-btn" onclick="switchPage('userManage')">用户管理</div>
+        <div class="function-btn" onclick="switchPage('permission')">权限配置</div>
+        <div class="function-btn" onclick="switchPage('importFile')">导入文件</div>
+        <div class="function-btn" onclick="switchPage('exportReport')">导出报告</div>
+        <div class="function-btn" onclick="switchPage('systemSet')">系统设置</div>
+        <div class="function-btn" onclick="switchPage('helpCenter')">帮助中心</div>
+    </div>
+</div>
+
+<!-- 页面切换脚本（保持极简） -->
+<script>
+    const outputArea = document.getElementById('outputArea');
+    const allBtns = document.querySelectorAll('.function-btn');
+    let switchCount = 0;
+
+    function switchPage(pageName) {
+        allBtns.forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        switchCount++;
+        const nowTime = new Date().toLocaleTimeString();
+        const pageMap = {
+            userManage: '用户管理页',
+            permission: '权限配置页',
+            importFile: '导入文件页',
+            exportReport: '导出报告页',
+            systemSet: '系统设置页',
+            helpCenter: '帮助中心页'
+        };
+
+        outputArea.innerHTML = `
+                <span class="title">页面状态：</span>
+                <p>切换次数：${switchCount} ｜ 切换时间：${nowTime}</p >
+                <p class="page-mark">当前页面：${pageMap[pageName]}</p >
+            `;
+        outputArea.scrollTop = 0;
+    }
+</script>
+</body>
+</html>
